@@ -69,6 +69,7 @@ namespace GuessTheWord
                     _wordToDisplay = string.Empty;
 
                     Console.Clear();
+                    Console.WriteLine("test");
 
                     return true;
                 }
