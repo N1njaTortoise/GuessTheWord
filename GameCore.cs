@@ -9,25 +9,19 @@ namespace GuessTheWord
 {
     class GameCore
     {
-        private const string gameTitle = "Guess the Word";
-        private const string gameTitleLine = "**********************************************";
-
         private string _guessedWordFromDictionary;
         private string playAgain;
 
         private List<string> _alreadyChosenLetters = new List<string>();
+        Words dictionary = new Words();
+        Headings headings = new Headings();
+
 
         private string _wordToGuessBlanked;
         private string _userInput = null;
         private string _wordToDisplay;
 
         private char[] maskedWord;
-
-        /*
-        LOGIC TO STILL DO
-               add array display of already selected words.
-               make nice
-        */
 
         private int _numberOfGuesses;
 
@@ -40,7 +34,9 @@ namespace GuessTheWord
             while (WinningCondition())
             {
                 Console.WriteLine(_guessedWordFromDictionary);
-                TitleMenu();
+                headings.TitleMenu();
+                //TitleMenu();
+                
                 DisplayWord();
 
                 _userInput = UserInput();
@@ -69,7 +65,6 @@ namespace GuessTheWord
                     _wordToDisplay = string.Empty;
 
                     Console.Clear();
-                    Console.WriteLine("test");
 
                     return true;
                 }
@@ -84,7 +79,7 @@ namespace GuessTheWord
                     Thread.Sleep(1500);
                     Console.Clear();
 
-                    TitleMenu();
+                    headings.TitleMenu();
                 }
             }
         }
@@ -122,7 +117,7 @@ namespace GuessTheWord
         {
             Console.Clear();
 
-            TitleMenu();
+            headings.TitleMenu();
 
             Console.WriteLine($"The word was : {_guessedWordFromDictionary}");
             Console.WriteLine($"\nYou {word}!");
@@ -134,8 +129,11 @@ namespace GuessTheWord
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine(_guessedWordFromDictionary);
-                TitleMenu();
+
+                //SHOWS WORD FOR TESTING
+                //Console.WriteLine(_guessedWordFromDictionary);
+
+                headings.TitleMenu();
                 DisplayWord();
                 Console.WriteLine($"\nNumber of tries remaining: {_numberOfGuesses}");
                 DisplayAlreadGuessedWords();
@@ -187,7 +185,7 @@ namespace GuessTheWord
             Thread.Sleep(1500);
             Console.Clear();
 
-            TitleMenu();
+            headings.TitleMenu();
             DisplayWord();
             Console.WriteLine($"Number of tries remaining: {_numberOfGuesses}");
             Console.WriteLine(string.Join(",", _alreadyChosenLetters));
@@ -249,8 +247,8 @@ namespace GuessTheWord
         {
             Console.Title = "Guess the Word Game";
 
-            TitleMenu();
-            Welcome();
+            headings.TitleMenu();
+            headings.Welcome();
 
             // Instantiate word dictionary
             CallGeneratedWord();
@@ -258,8 +256,9 @@ namespace GuessTheWord
 
         private void CallGeneratedWord()
         {
-            Words dictionary = new Words();
-            _guessedWordFromDictionary = dictionary.GeneratedWordFromDictionary();
+            dictionary.AddNewWords();
+
+            _guessedWordFromDictionary = dictionary.GeneratedWord;
 
             _wordToGuessBlanked = new string('-', _guessedWordFromDictionary.Length);
 
@@ -272,29 +271,6 @@ namespace GuessTheWord
         {
             Console.Write("The word to guess is : ");
             Console.WriteLine(string.Join("", maskedWord));
-        }
-
-        private void Welcome()
-        {
-            Console.WriteLine("\nWelcome to Guess the Word Game." +
-                "\n\nTo play the game the blanked out word should be guessed in full or " +
-                "\nindividual letters guessed to discover the word - just like hangman!" +
-                "\nYou will have a number of tries equal to a third of the word length." +
-                "\nIf you get guesses wrong, your tries will decrease up to zero. After which it's game over." +
-                "\n\nGood Luck!\n");
-
-            Console.Write("Press enter to continue");
-            Console.ReadKey(true);
-            Console.Clear();
-        }
-
-        private void TitleMenu()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(gameTitle);
-            Console.ResetColor();
-
-            Console.WriteLine(gameTitleLine);
         }
     }
 }
